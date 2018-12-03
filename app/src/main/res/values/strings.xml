@@ -5,4 +5,11 @@
     <string name="btn_google">Sign in with Google</string>
 
     <string name="item_search">Search</string>
+
+    <string name="item_your_lunch">YOUR LUNCH</string>
+    <string name="item_settings">SETTINGS</string>
+    <string name="item_log_out">LOGOUT</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
