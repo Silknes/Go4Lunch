@@ -1,8 +1,10 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Go4Lunch</string>
+    <string name="app_slogan">Find a nice restaurant and invite your co-workers for lunch !</string>
 
     <string name="btn_facebook">Sign in with Facebook</string>
     <string name="btn_google">Sign in with Google</string>
+    <string name="connection_failed">Connection failed</string>
 
     <string name="item_search">Search</string>
 
@@ -12,4 +14,11 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="facebook_application_id">2071544302892177</string>
+    <string name="facebook_login_protocol_scheme" translatable="false" tools:ignore="UnusedResources">fb2071544302892177</string>
+
+    <string name="popup_message_confirmation_deconnection">Do you want to disconnect ?</string>
+    <string name="popup_message_choice_yes">Yes</string>
+    <string name="popup_message_choice_no">No</string>
 </resources>

@@ -6,4 +6,5 @@
 
     <color name="btn_facebook">#3B5998</color>
     <color name="btn_google">#DB3236</color>
+    <color name="background_menu_nav_drawer">#FEA347</color>
 </resources>

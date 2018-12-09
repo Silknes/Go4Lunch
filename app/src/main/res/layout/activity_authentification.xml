@@ -1,39 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@drawable/family_dinner"
+    android:id="@+id/main_activity_coordinator_layout"
     tools:context=".Controller.Activities.AuthentificationActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp">
+        android:gravity="center_horizontal">
 
-        <Button
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/icn_go_4_lunch"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="60sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_slogan"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="100dp"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_facebook"
-            android:background="@drawable/auth_facebook_btn"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="20dp"
-            android:textAllCaps="false"
-            android:id="@+id/activity_auth_btn_facebook"/>
+            android:orientation="vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_google"
-            android:background="@drawable/auth_google_btn"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="20dp"
-            android:textAllCaps="false"
-            android:id="@+id/activity_auth_btn_google"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_facebook"
+                android:background="@drawable/auth_facebook_btn"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="20dp"
+                android:textAllCaps="false"
+                android:id="@+id/activity_auth_btn_facebook"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_google"
+                android:background="@drawable/auth_google_btn"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="20dp"
+                android:textAllCaps="false"
+                android:id="@+id/activity_auth_btn_google"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

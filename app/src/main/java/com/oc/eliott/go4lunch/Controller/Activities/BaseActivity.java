@@ -16,11 +16,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
     }
 
+    // Method that return the current user
     @Nullable
     protected FirebaseUser getCurrentUser(){
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
+    // Method that return the state of the user, if he is connected or not
     protected boolean isCurrentUserLogged(){
         return this.getCurrentUser() != null;
     }

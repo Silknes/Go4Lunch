@@ -38,13 +38,28 @@
     <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@drawable/drawable_menu_navigation_drawer"
+        android:background="@color/background_menu_nav_drawer"
         design:itemTextColor="@android:color/white"
         design:itemIconTint="@android:color/white"
         android:layout_gravity="start"
         android:fitsSystemWindows="false"
         app:headerLayout="@layout/activity_main_nav_header"
         app:menu="@menu/menu_drawer"
-        android:id="@+id/activity_main_navigation_drawer"/>
+        android:id="@+id/activity_main_navigation_drawer">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/icn_go_4_lunch"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
