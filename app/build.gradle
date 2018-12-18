@@ -13,11 +13,13 @@ android {
     buildTypes {
         debug {
             buildConfigField 'String', "ApiKey", Go4Lunch_Apikey_GooglePlaces
+            resValue 'string', "ApiKey", Go4Lunch_Apikey_GooglePlaces
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "ApiKey", Go4Lunch_Apikey_GooglePlaces
+            resValue 'string', "ApiKey", Go4Lunch_Apikey_GooglePlaces
         }
     }
 }
