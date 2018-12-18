@@ -20,18 +20,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:id="@+id/main_activity_fragment_container"/>
 
-            <android.support.design.widget.BottomNavigationView
-                android:id="@+id/activity_main_bottom_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                design:menu="@menu/menu_nav"/>
-
-        </RelativeLayout>
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/activity_main_bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            design:menu="@menu/menu_nav"/>
 
     </LinearLayout>
 

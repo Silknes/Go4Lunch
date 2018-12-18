@@ -2,13 +2,22 @@ package com.oc.eliott.go4lunch.Controller.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -18,6 +27,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.oc.eliott.go4lunch.BuildConfig;
+import com.oc.eliott.go4lunch.Controller.Controller.Fragments.MapViewFragment;
+import com.oc.eliott.go4lunch.Controller.Controller.Fragments.WorkmatesFragment;
+import com.oc.eliott.go4lunch.Controller.Fragments.RecyclerViewFragment;
 import com.oc.eliott.go4lunch.R;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -25,6 +42,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private DrawerLayout drawerLayout; // Use to set a Navigation Drawer
     private TextView emailUser, nameUser; // These TextView will contain user's mail and name
     private ImageView profilImgUser; // This ImageView will contains user's profile photo
+    private BottomNavigationView bottomNavigationView;
+    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
+    private Fragment fragment;
+    private boolean mLocationPermissionGranted; // Set to true if the user accept to be located
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private Location mLastKnownLocation; // Contain the last known location of the user's phone
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private double longitude; // Contain the longitude of the user's phone
+    private double latitude; // Contain the latitude of the user's phone
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +68,25 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         this.configureDrawerLayout();
         this.configureNavigationView();
         this.updateUIWhenCreating();
+
+        // Start the activity with the MapViewFragment
+        fragment = new MapViewFragment();
+        configureAndShowFragment(fragment);
+
+        // Add a listener on each item of the BottomNavigationView
+        bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation);
+        this.addListenerToBottomNavigationViewItem();
+        bottomNavigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+
+        // Call the method that get the permission to locate the phone and the method that get the location of the phone
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        this.getLocationPermission();
+        this.getDeviceLocation();
     }
 
     // Starting AuthentificationActivity if current user not log
     private void updateUIWhenCreating(){
-        if(isCurrentUserLogged()){
-
-        }
-        else{
+        if(!isCurrentUserLogged()){
             Intent intent = new Intent(this, AuthentificationActivity.class);
             startActivity(intent);
         }
@@ -111,6 +148,37 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
+    private void addListenerToBottomNavigationViewItem(){
+        onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.menu_nav_map_view:
+                        fragment = new MapViewFragment();
+                        configureAndShowFragment(fragment);
+                        return true;
+                    case R.id.menu_nav_list_view:
+                        fragment = new RecyclerViewFragment();
+                        configureAndShowFragment(fragment);
+                        return true;
+                    case R.id.menu_nav_workmates:
+                        fragment = new WorkmatesFragment();
+                        configureAndShowFragment(fragment);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        };
+    }
+
+    private void configureAndShowFragment(Fragment fragment){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_activity_fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     // This method set a new icon on the toolbar which open the NavigationDrawer
     private void configureDrawerLayout(){
         this.drawerLayout = findViewById(R.id.activity_main_drawer_layout);
@@ -150,6 +218,53 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             glide.load(getCurrentUser().getPhotoUrl()).into(profilImgUser);
             nameUser.setText(getCurrentUser().getDisplayName());
             emailUser.setText(getCurrentUser().getEmail());
+        }
+    }
+
+    // If user accept to locate his phone then we get the latitude and the longitude
+    private void getDeviceLocation() {
+        try {
+            if (mLocationPermissionGranted) {
+                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            mLastKnownLocation = task.getResult();
+                            latitude = mLastKnownLocation.getLatitude();
+                            longitude = mLastKnownLocation.getLongitude();
+                            //Toast.makeText(MainActivity.this, "latitude : " + latitude + " , longitude : " + longitude, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    // Ask to the user the permission to locate his phone
+    private void getLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    // Get the result choose by the user in the variable mLocationPermissionGranted
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+                }
+            }
         }
     }
 }
