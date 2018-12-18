@@ -1,4 +1,4 @@
-package com.oc.eliott.go4lunch.Controller.Controller.Fragments;
+package com.oc.eliott.go4lunch.Controller.Fragments;
 
 
 import android.os.Bundle;

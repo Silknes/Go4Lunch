@@ -31,10 +31,9 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.oc.eliott.go4lunch.BuildConfig;
-import com.oc.eliott.go4lunch.Controller.Controller.Fragments.MapViewFragment;
-import com.oc.eliott.go4lunch.Controller.Controller.Fragments.WorkmatesFragment;
+import com.oc.eliott.go4lunch.Controller.Fragments.MapViewFragment;
 import com.oc.eliott.go4lunch.Controller.Fragments.RecyclerViewFragment;
+import com.oc.eliott.go4lunch.Controller.Fragments.WorkmatesFragment;
 import com.oc.eliott.go4lunch.R;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
