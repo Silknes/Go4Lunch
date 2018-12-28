@@ -8,17 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.RequestManager;
-import com.oc.eliott.go4lunch.Model.Result;
+import com.oc.eliott.go4lunch.Model.GooglePlaces.Result;
+import com.oc.eliott.go4lunch.Model.PlaceDetails.DataPlaceDetails;
+import com.oc.eliott.go4lunch.Model.PlaceDetails.ResultPlaceDetails;
 import com.oc.eliott.go4lunch.R;
 
 import java.util.List;
 
 public class GooglePlacesAdapter extends RecyclerView.Adapter<GooglePlacesViewHolder> {
     private List<Result> listRestaurants;
+    private List<ResultPlaceDetails> listRestaurantDetails;
     private RequestManager glide;
 
-    public GooglePlacesAdapter(List<Result> listRestaurants, RequestManager glide){
+    public GooglePlacesAdapter(List<Result> listRestaurants, List<ResultPlaceDetails> restaurantDetails, RequestManager glide){
         this.listRestaurants = listRestaurants;
+        this.listRestaurantDetails = restaurantDetails;
         this.glide = glide;
     }
 
@@ -33,7 +37,7 @@ public class GooglePlacesAdapter extends RecyclerView.Adapter<GooglePlacesViewHo
 
     @Override
     public void onBindViewHolder(@NonNull GooglePlacesViewHolder holder, int position) {
-        holder.updateWithGooglePlaces(this.listRestaurants.get(position), this.glide);
+        holder.updateWithGooglePlaces(this.listRestaurants.get(position), this.listRestaurantDetails.get(position), this.glide);
     }
 
     @Override

@@ -35,6 +35,7 @@ import com.oc.eliott.go4lunch.Controller.Fragments.MapViewFragment;
 import com.oc.eliott.go4lunch.Controller.Fragments.RecyclerViewFragment;
 import com.oc.eliott.go4lunch.Controller.Fragments.WorkmatesFragment;
 import com.oc.eliott.go4lunch.R;
+import com.oc.eliott.go4lunch.Utils.LocationSingleton;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
     private Toolbar toolbar; // Use to set a new Toolbar
@@ -48,8 +49,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private Location mLastKnownLocation; // Contain the last known location of the user's phone
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private double longitude; // Contain the longitude of the user's phone
-    private double latitude; // Contain the latitude of the user's phone
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,9 +229,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
                             mLastKnownLocation = task.getResult();
-                            latitude = mLastKnownLocation.getLatitude();
-                            longitude = mLastKnownLocation.getLongitude();
-                            //Toast.makeText(MainActivity.this, "latitude : " + latitude + " , longitude : " + longitude, Toast.LENGTH_LONG).show();
+                            LocationSingleton.getInstance().setLat(mLastKnownLocation.getLatitude());
+                            LocationSingleton.getInstance().setLng(mLastKnownLocation.getLongitude());
+                            //Toast.makeText(MainActivity.this, "location : " + LocationSingleton.getInstance().toString(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });

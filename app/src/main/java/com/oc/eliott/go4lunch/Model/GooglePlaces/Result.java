@@ -1,7 +1,12 @@
-package com.oc.eliott.go4lunch.Model;
+package com.oc.eliott.go4lunch.Model.GooglePlaces;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.oc.eliott.go4lunch.BuildConfig;
+import com.oc.eliott.go4lunch.Model.GooglePlaces.Geometry;
+import com.oc.eliott.go4lunch.Model.GooglePlaces.OpeningHours;
+import com.oc.eliott.go4lunch.Model.GooglePlaces.Photo;
+import com.oc.eliott.go4lunch.Model.GooglePlaces.PlusCode;
 
 import java.util.List;
 
@@ -159,5 +164,17 @@ public class Result {
 
     public void setPriceLevel(Integer priceLevel) {
         this.priceLevel = priceLevel;
+    }
+
+    public String getPhotoUrl(int maxWidth){
+        if(!photos.isEmpty()){
+            String key = BuildConfig.ApiKey;
+            Photo photo = photos.get(0);
+            String ref = photo.getPhotoReference();
+            String url = String.format("https://maps.googleapis.com/maps/api/place/photo?maxwidth=%d&photoreference=%s&key=%s", maxWidth, ref, key);
+            //String url = "https://www.youtube.com/yt/about/media/images/brand-resources/icons/YouTube-icon-our_icon.png";
+            return url;
+        }
+        return null;
     }
 }

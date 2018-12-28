@@ -1,7 +1,8 @@
-package com.oc.eliott.go4lunch.Model;
+package com.oc.eliott.go4lunch.Model.GooglePlaces;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.oc.eliott.go4lunch.Model.GooglePlaces.Result;
 
 import java.util.List;
 

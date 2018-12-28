@@ -1,6 +1,13 @@
 package com.oc.eliott.go4lunch.Utils;
 
-import com.oc.eliott.go4lunch.Model.ResultGooglePlaces;
+import android.media.Image;
+
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlacePhotoResponse;
+import com.google.android.gms.location.places.PlacePhotoResult;
+import com.oc.eliott.go4lunch.Model.GooglePlaces.Photo;
+import com.oc.eliott.go4lunch.Model.GooglePlaces.ResultGooglePlaces;
+import com.oc.eliott.go4lunch.Model.PlaceDetails.ResultPlaceDetails;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -14,6 +21,11 @@ public interface GoogleAPIService {
                                                  @Query("location")String gpsCoordinates,
                                                  @Query("rankby")String rankBy,
                                                  @Query("types")String types);
+
+    @GET("details/json?")
+    Call<ResultPlaceDetails> getRestaurantDetails(@Query("key")String apiKey,
+                                                      @Query("placeid")String placeId,
+                                                      @Query("fields") String fields);
 
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com/maps/api/place/")

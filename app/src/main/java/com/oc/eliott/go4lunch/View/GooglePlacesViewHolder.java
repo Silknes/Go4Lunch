@@ -1,13 +1,27 @@
 package com.oc.eliott.go4lunch.View;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.oc.eliott.go4lunch.Model.Result;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
+import com.oc.eliott.go4lunch.Model.GooglePlaces.Result;
+import com.oc.eliott.go4lunch.Model.PlaceDetails.DataPlaceDetails;
+import com.oc.eliott.go4lunch.Model.PlaceDetails.Period;
+import com.oc.eliott.go4lunch.Model.PlaceDetails.ResultPlaceDetails;
 import com.oc.eliott.go4lunch.R;
+import com.oc.eliott.go4lunch.Utils.LocationSingleton;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class GooglePlacesViewHolder extends RecyclerView.ViewHolder {
     private TextView nameRestaurant, addressRestaurant, scheduleRestaurant;
@@ -27,20 +41,77 @@ public class GooglePlacesViewHolder extends RecyclerView.ViewHolder {
         icnRestaurant = itemView.findViewById(R.id.recycler_view_fragment_img_restaurant);
     }
 
-    public void updateWithGooglePlaces(Result restaurant, RequestManager glide){
+    public void updateWithGooglePlaces(Result restaurant, ResultPlaceDetails restaurantDetails, RequestManager glide){
         nameRestaurant.setText(restaurant.getName());
         addressRestaurant.setText(restaurant.getVicinity());
 
-        getOpeningHours(restaurant);
+        if(restaurantDetails.getResult().getOpeningHours() != null) this.isRestaurantOpen(restaurantDetails);
+        else scheduleRestaurant.setText("Cannot access opening hours");
+
+        this.calculteDistance(restaurant);
+
+        glide.load(restaurant.getPhotoUrl(400)).into(icnRestaurant);
     }
 
-    private void getOpeningHours(Result restaurant){
-        String openingHours;
-        if(restaurant.getOpeningHours() != null) {
-            if(restaurant.getOpeningHours().getOpenNow()) openingHours = "Open";
-            else openingHours = "Close";
+    private void isRestaurantOpen(ResultPlaceDetails restaurantDetails){
+        Calendar calendar = Calendar.getInstance();
+        for(Period period : restaurantDetails.getResult().getOpeningHours().getPeriods()){
+            if(period.getClose() == null) scheduleRestaurant.setText("Open 24/7");
+            else {
+                if(period.getClose().getDay() == calendar.get(Calendar.DAY_OF_WEEK) - 1) {
+                    if (getOpeningHour(period) == 1)
+                        scheduleRestaurant.setText("Open until " + formatClosureHour(period));
+                    if (getOpeningHour(period) == 2)
+                        scheduleRestaurant.setText("Open at " + formatOpenHour(period));
+                    if (getOpeningHour(period) == 3) scheduleRestaurant.setText("Close");
+                }
+            }
         }
-        else openingHours = "Impossible to get opening hours";
-        scheduleRestaurant.setText(openingHours);
+    }
+
+    private int getOpeningHour(Period period){
+        Calendar calendar = Calendar.getInstance();
+        int currentHour = Integer.parseInt("" + calendar.get(Calendar.HOUR_OF_DAY) + calendar.get(Calendar.MINUTE));
+        int closureHour = Integer.parseInt(period.getClose().getTime());
+        int openHour = Integer.parseInt(period.getOpen().getTime());
+        if(currentHour <= closureHour) {
+            if(currentHour >= openHour) return 1;
+            else return 2;
+        }
+        else return 3;
+    }
+
+    private void test(Context context, long time) {
+        SimpleDateFormat sdf;
+        if (DateFormat.is24HourFormat(context))
+            sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        else
+            sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+
+        String hour = sdf.format(new Date(time));
+    }
+
+    private String formatClosureHour(Period period){
+        String hour;
+        if(Integer.parseInt(period.getClose().getTime().substring(0,2)) < 12)
+            hour = period.getClose().getTime().substring(0,2) + ":" + period.getClose().getTime().substring(2,4) + "am";
+        else hour = "" + (Integer.parseInt(period.getClose().getTime().substring(0,2)) - 12) + ":" + period.getClose().getTime().substring(2,4) + "pm";
+        return hour;
+    }
+
+    private String formatOpenHour(Period period){
+        String hour;
+        if(Integer.parseInt(period.getOpen().getTime().substring(0,2)) < 12)
+            hour = period.getOpen().getTime().substring(0,2) + ":" + period.getOpen().getTime().substring(2,4) + "am";
+        else hour = "" + (Integer.parseInt(period.getOpen().getTime().substring(0,2)) - 12) + ":" + period.getOpen().getTime().substring(2,4) + "pm";
+        return hour;
+    }
+
+    private void calculteDistance(Result restaurant){
+        LatLng destinationLocation = new LatLng(restaurant.getGeometry().getLocation().getLat(), restaurant.getGeometry().getLocation().getLng());
+        double doubleDistanceToRestaurant = SphericalUtil.computeDistanceBetween(LocationSingleton.getInstance().getLocation(), destinationLocation);
+        int intDistanceToRestaurant = (int)Math.round(doubleDistanceToRestaurant);
+        String stringDistanceToRestaurant = "" + intDistanceToRestaurant + "m";
+        this.distanceToRestaurant.setText(stringDistanceToRestaurant);
     }
 }

@@ -3,82 +3,96 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="10dp">
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="5">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:id="@+id/recycler_view_fragment_name_restaurant"
-            android:text="MacDonald"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:id="@+id/recycler_view_fragment_address_restaurant"
-            android:text="3 rue des Rues"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/recycler_view_fragment_schedule_restaurant"
-            android:text="8H - 10H"
-            android:textStyle="italic"/>
-
-    </RelativeLayout>
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="0.5">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/recycler_view_fragment_distance_to_restaurant"
-            android:text="120m"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/recycler_view_fragment_icn_people"
-                android:src="@drawable/ic_people_outline_black_24dp"/>
+            android:layout_height="match_parent"
+            android:layout_weight="5">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/recycler_view_fragment_workmates_going_to_restaurant"
-                android:text="(2)"/>
+                android:layout_alignParentTop="true"
+                android:id="@+id/recycler_view_fragment_name_restaurant"
+                android:text="MacDonald"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:id="@+id/recycler_view_fragment_address_restaurant"
+                android:text="3 rue des Rues"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/recycler_view_fragment_schedule_restaurant"
+                android:text="Close today"
+                android:textStyle="italic"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_view_fragment_distance_to_restaurant"
+                android:text="120m"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recycler_view_fragment_icn_people"
+                    android:src="@drawable/ic_people_outline_black_24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recycler_view_fragment_workmates_going_to_restaurant"
+                    android:text="(2)"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_view_fragment_rating_restaurant"/>
 
         </LinearLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/recycler_view_fragment_rating_restaurant"/>
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/recycler_view_fragment_img_restaurant"
+            android:src="@drawable/family_dinner"
+            android:scaleType="centerCrop">
+
+        </ImageView>
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:id="@+id/recycler_view_fragment_img_restaurant"
-        android:src="@drawable/family_dinner">
-
-    </ImageView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@android:color/darker_gray"
+        android:alpha="0.2"/>
 
 </LinearLayout>

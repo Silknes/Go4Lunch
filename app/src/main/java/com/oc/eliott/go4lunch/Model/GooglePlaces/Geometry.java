@@ -1,4 +1,4 @@
-package com.oc.eliott.go4lunch.Model;
+package com.oc.eliott.go4lunch.Model.GooglePlaces;
 
 
 import com.google.gson.annotations.Expose;
