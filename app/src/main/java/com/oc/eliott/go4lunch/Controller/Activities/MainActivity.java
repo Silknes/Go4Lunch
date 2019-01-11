@@ -84,7 +84,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     // Starting AuthentificationActivity if current user not log
     private void updateUIWhenCreating(){
-        if(!isCurrentUserLogged()){
+        if(getCurrentUser() != null ){
+
+        }
+        else{
             Intent intent = new Intent(this, AuthentificationActivity.class);
             startActivity(intent);
         }
@@ -131,7 +134,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
         switch (id){
             case R.id.item_your_lunch :
-                Toast.makeText(this, "Your Lunch", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, LunchActivity.class);
+                startActivity(intent);
                 break;
             case R.id.item_settings:
                 Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
@@ -193,7 +197,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     // Method open an AlertBuilder to disconnect the user if he click on the positive button
     private void signOutUserFromFirebase(){
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this, R.style.AlertDialogTheme)
                 .setMessage(R.string.popup_message_confirmation_deconnection)
                 .setPositiveButton(R.string.popup_message_choice_yes, new DialogInterface.OnClickListener() {
                     @Override
@@ -229,8 +233,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
                             mLastKnownLocation = task.getResult();
-                            LocationSingleton.getInstance().setLat(mLastKnownLocation.getLatitude());
-                            LocationSingleton.getInstance().setLng(mLastKnownLocation.getLongitude());
+                            if(mLastKnownLocation != null) LocationSingleton.getInstance().setLat(mLastKnownLocation.getLatitude());
+                            if(mLastKnownLocation != null) LocationSingleton.getInstance().setLng(mLastKnownLocation.getLongitude());
                             //Toast.makeText(MainActivity.this, "location : " + LocationSingleton.getInstance().toString(), Toast.LENGTH_LONG).show();
                         }
                     }

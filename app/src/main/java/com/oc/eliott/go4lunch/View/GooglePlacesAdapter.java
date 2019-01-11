@@ -42,7 +42,6 @@ public class GooglePlacesAdapter extends RecyclerView.Adapter<GooglePlacesViewHo
 
     @Override
     public int getItemCount() {
-        if(this.listRestaurants.size() < 10) return this.listRestaurants.size();
-        else return 10;
+        return listRestaurants.size();
     }
 }

@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
+import com.oc.eliott.go4lunch.Api.RestaurantHelper;
 import com.oc.eliott.go4lunch.Model.GooglePlaces.Result;
 import com.oc.eliott.go4lunch.Model.PlaceDetails.DataPlaceDetails;
 import com.oc.eliott.go4lunch.Model.PlaceDetails.Period;
@@ -42,7 +43,7 @@ public class GooglePlacesViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void updateWithGooglePlaces(Result restaurant, ResultPlaceDetails restaurantDetails, RequestManager glide){
-        nameRestaurant.setText(restaurant.getName());
+        nameRestaurant.setText(restaurantDetails.getResult().getName());
         addressRestaurant.setText(restaurant.getVicinity());
 
         if(restaurantDetails.getResult().getOpeningHours() != null) this.isRestaurantOpen(restaurantDetails);
@@ -51,6 +52,18 @@ public class GooglePlacesViewHolder extends RecyclerView.ViewHolder {
         this.calculteDistance(restaurant);
 
         glide.load(restaurant.getPhotoUrl(400)).into(icnRestaurant);
+
+        createRestaurantInFirestore(restaurant, restaurantDetails);
+    }
+
+    private void createRestaurantInFirestore(Result restaurant, ResultPlaceDetails restaurantDetails){
+        String uid = restaurant.getPlaceId();
+        String name = restaurant.getName();
+        String address = restaurant.getVicinity();
+        String urlPhoto = restaurant.getPhotoUrl(400);
+        String phoneNumber = restaurantDetails.getResult().getFormattedPhoneNumber();
+        String website = restaurantDetails.getResult().getWebsite();
+        RestaurantHelper.createRestaurant(uid, name, urlPhoto, address, phoneNumber, website);
     }
 
     private void isRestaurantOpen(ResultPlaceDetails restaurantDetails){

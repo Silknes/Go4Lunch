@@ -167,14 +167,16 @@ public class Result {
     }
 
     public String getPhotoUrl(int maxWidth){
-        if(!photos.isEmpty()){
+        if(photos != null && !photos.isEmpty()){
             String key = BuildConfig.ApiKey;
             Photo photo = photos.get(0);
             String ref = photo.getPhotoReference();
             String url = String.format("https://maps.googleapis.com/maps/api/place/photo?maxwidth=%d&photoreference=%s&key=%s", maxWidth, ref, key);
-            //String url = "https://www.youtube.com/yt/about/media/images/brand-resources/icons/YouTube-icon-our_icon.png";
             return url;
         }
-        return null;
+        else {
+            String url = "https://st.depositphotos.com/1000407/3700/v/950/depositphotos_37000173-stock-illustration-restaurant-icon.jpg";
+            return url;
+        }
     }
 }

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#ff6600</color>
     <color name="colorPrimaryDark">#ff3300</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FFFFFF</color>
 
     <color name="btn_facebook">#3B5998</color>
     <color name="btn_google">#DB3236</color>
@@ -10,4 +10,5 @@
 
     <color name="error_color">#FF0000</color>
     <color name="ok_color">#008000</color>
+    <color name="like">#F9FF4C</color>
 </resources>

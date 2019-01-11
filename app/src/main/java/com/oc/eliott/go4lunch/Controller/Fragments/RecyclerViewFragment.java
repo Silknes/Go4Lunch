@@ -1,41 +1,41 @@
 package com.oc.eliott.go4lunch.Controller.Fragments;
 
 
-import android.media.Image;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.PlacePhotoResponse;
-import com.google.android.gms.location.places.PlacePhotoResult;
 import com.oc.eliott.go4lunch.BuildConfig;
-import com.oc.eliott.go4lunch.Model.GooglePlaces.Photo;
+import com.oc.eliott.go4lunch.Controller.Activities.DetailRestaurantActivity;
 import com.oc.eliott.go4lunch.Model.GooglePlaces.Result;
 import com.oc.eliott.go4lunch.Model.GooglePlaces.ResultGooglePlaces;
 import com.oc.eliott.go4lunch.Model.PlaceDetails.ResultPlaceDetails;
 import com.oc.eliott.go4lunch.R;
 import com.oc.eliott.go4lunch.Utils.GoogleAPICalls;
+import com.oc.eliott.go4lunch.Utils.ItemClickSupport;
 import com.oc.eliott.go4lunch.Utils.LocationSingleton;
 import com.oc.eliott.go4lunch.View.GooglePlacesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.CallbacksGooglePlaces, GoogleAPICalls.CallbacksPlaceDetails{
     private GooglePlacesAdapter adapter;
     private RecyclerView recyclerView;
     private List<Result> listRestaurant;
     private List<ResultPlaceDetails> restaurantDetails;
-    private List<String> listPlaceID, listPhotoReference;
     private int position = 0;
+
+    private AtomicInteger requestCount;
 
     public RecyclerViewFragment() {}
 
@@ -48,6 +48,7 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
 
         this.configureRecyclerView();
         this.fetchRestaurantsNearby();
+        this.configureOnClickRecyclerView();
 
         return view;
     }
@@ -60,24 +61,31 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
         this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    private void configureOnClickRecyclerView(){
+        ItemClickSupport.addTo(recyclerView, R.layout.recycler_view_fragment_item)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Intent intent = new Intent(getContext(), DetailRestaurantActivity.class);
+                        intent.putExtra("idRestaurant", listRestaurant.get(position).getPlaceId());
+                        startActivity(intent);
+                    }
+                });
+    }
+
     public void fetchRestaurantsNearby(){
         GoogleAPICalls.fetchRestaurantNearby(this, BuildConfig.ApiKey, "" + LocationSingleton.getInstance().toString() , "distance", "restaurant");
     }
 
     public void fetchRestaurantDetails(String placeID){
-        GoogleAPICalls.fetchRestaurantDetails(this, BuildConfig.ApiKey, placeID, "opening_hours");
+        GoogleAPICalls.fetchRestaurantDetails(this, BuildConfig.ApiKey, placeID, "opening_hours,name,website,formatted_phone_number,formatted_address");
     }
 
-    // Ne plus utiliser listPlaceID récupérer l'ID depuis listRestaurant
     @Override
     public void onResponseGooglePlaces(@Nullable ResultGooglePlaces resultGP) {
         if(resultGP != null) {
             listRestaurant.addAll(resultGP.getResults());
-            listPlaceID = new ArrayList<>();
-            for(Result result : resultGP.getResults()){
-                listPlaceID.add(result.getPlaceId());
-            }
-            fetchRestaurantDetails(listPlaceID.get(0));
+            fetchRestaurantDetails(listRestaurant.get(0).getPlaceId());
         }
     }
 
@@ -89,12 +97,11 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
         if(resultPD != null) {
             restaurantDetails.add(resultPD);
             position = position + 1;
-            if(position < 10){
-                fetchRestaurantDetails(listPlaceID.get(position));
+            if(position < 20){
+                fetchRestaurantDetails(listRestaurant.get(position).getPlaceId());
             }
-            if(position == 10){
+            if(position == 20){
                 updateUI();
-                //Toast.makeText(getContext(), listPlaceID.toString(), Toast.LENGTH_LONG).show();
             }
         }
     }
