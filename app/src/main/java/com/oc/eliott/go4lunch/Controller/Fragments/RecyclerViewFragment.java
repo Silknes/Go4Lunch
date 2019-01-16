@@ -35,8 +35,6 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
     private List<ResultPlaceDetails> restaurantDetails;
     private int position = 0;
 
-    private AtomicInteger requestCount;
-
     public RecyclerViewFragment() {}
 
     @Override
@@ -77,39 +75,37 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
         GoogleAPICalls.fetchRestaurantNearby(this, BuildConfig.ApiKey, "" + LocationSingleton.getInstance().toString() , "distance", "restaurant");
     }
 
-    public void fetchRestaurantDetails(String placeID){
-        GoogleAPICalls.fetchRestaurantDetails(this, BuildConfig.ApiKey, placeID, "opening_hours,name,website,formatted_phone_number,formatted_address");
+    public void fetchRestaurantDetails(String placeID, int position){
+        GoogleAPICalls.fetchRestaurantDetails(this, BuildConfig.ApiKey, placeID, "opening_hours,name,website,formatted_phone_number,formatted_address", position);
     }
 
     @Override
     public void onResponseGooglePlaces(@Nullable ResultGooglePlaces resultGP) {
         if(resultGP != null) {
             listRestaurant.addAll(resultGP.getResults());
-            fetchRestaurantDetails(listRestaurant.get(0).getPlaceId());
+            atomicInteger = new AtomicInteger(listRestaurant.size()-1);
+            for (int i = 0; i < listRestaurant.size(); i++) {
+                restaurantDetails.add(new ResultPlaceDetails());
+            }
+            for (int i = 0; i < listRestaurant.size(); i++) {
+                fetchRestaurantDetails(listRestaurant.get(i).getPlaceId(), i);
+            }
         }
     }
 
     @Override
     public void onFailureGooglePlaces() { }
 
+    private AtomicInteger atomicInteger;
+
     @Override
-    public void onResponsePlaceDetails(@Nullable ResultPlaceDetails resultPD) {
+    public synchronized void onResponsePlaceDetails(@Nullable ResultPlaceDetails resultPD, int position) {
         if(resultPD != null) {
-            restaurantDetails.add(resultPD);
-            position = position + 1;
-            if(position < 20){
-                fetchRestaurantDetails(listRestaurant.get(position).getPlaceId());
-            }
-            if(position == 20){
-                updateUI();
-            }
+            restaurantDetails.set(position, resultPD);
+            if(atomicInteger.getAndDecrement() < 1)adapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void onFailurePlaceDetails() { }
-
-    private void updateUI(){
-        adapter.notifyDataSetChanged();
-    }
 }

@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.oc.eliott.go4lunch.Model.User;
 
 public class UserHelper {
@@ -28,5 +29,9 @@ public class UserHelper {
 
     public static Task<Void> updateRestaurantId(String uid, String idRestaurant){
         return UserHelper.getUsersCollection().document(uid).update("idRestaurant", idRestaurant);
+    }
+
+    public static Query getAllUsers(){
+        return UserHelper.getUsersCollection().orderBy("idRestaurant", Query.Direction.DESCENDING);
     }
 }

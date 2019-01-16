@@ -23,7 +23,7 @@ public class GoogleAPICalls {
     }
 
     public interface CallbacksPlaceDetails{
-        void onResponsePlaceDetails(@Nullable ResultPlaceDetails resultPD);
+        void onResponsePlaceDetails(@Nullable ResultPlaceDetails resultPD, int position);
         void onFailurePlaceDetails();
     }
 
@@ -43,14 +43,14 @@ public class GoogleAPICalls {
         });
     }
 
-    public static void fetchRestaurantDetails(CallbacksPlaceDetails callbacks, String apiKey, String placeId, String fields){
+    public static void fetchRestaurantDetails(CallbacksPlaceDetails callbacks, String apiKey, String placeId, String fields, final int position){
         final WeakReference<CallbacksPlaceDetails> callbacksWeakReference = new WeakReference<>(callbacks);
         GoogleAPIService googleAPIService = GoogleAPIService.retrofit.create(GoogleAPIService.class);
         Call<ResultPlaceDetails> call = googleAPIService.getRestaurantDetails(apiKey, placeId, fields);
         call.enqueue(new Callback<ResultPlaceDetails>(){
             @Override
             public void onResponse(Call<ResultPlaceDetails> call, Response<ResultPlaceDetails> response){
-                if(callbacksWeakReference.get() != null) callbacksWeakReference.get().onResponsePlaceDetails(response.body());
+                if(callbacksWeakReference.get() != null) callbacksWeakReference.get().onResponsePlaceDetails(response.body(), position);
             }
             @Override
             public void onFailure(Call<ResultPlaceDetails> call, Throwable t) {

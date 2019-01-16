@@ -13,9 +13,6 @@ import android.widget.TextView;
 
 import com.oc.eliott.go4lunch.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class BasicFragment extends Fragment {
     protected ImageView imgRestaurant;
     protected TextView nameRestaurant, addressRestaurant, likeTxt;

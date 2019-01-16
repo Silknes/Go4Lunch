@@ -11,4 +11,6 @@
     <color name="error_color">#FF0000</color>
     <color name="ok_color">#008000</color>
     <color name="like">#F9FF4C</color>
+
+    <color name="no_restaurant">@android:color/darker_gray</color>
 </resources>
