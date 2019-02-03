@@ -37,8 +37,8 @@ import java.util.List;
 import javax.security.auth.callback.Callback;
 
 public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.Listener{
-    private RecyclerView recyclerView;
-    private WorkmatesAdapter workmatesAdapter;
+    private RecyclerView recyclerView; // Use to customize the recycler view
+    private WorkmatesAdapter workmatesAdapter; // Use to implement the recycler view
 
     public WorkmatesFragment() {}
 
@@ -55,6 +55,7 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.List
         return view;
     }
 
+    // Method that configure our recycler view, importance to notice that is a recycler view from firestore
     private void configureRecyclerView(){
         this.workmatesAdapter = new WorkmatesAdapter(generateOptionsForAdapter(UserHelper.getAllUsers()),
                 Glide.with(this), this, FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -68,6 +69,7 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.List
         recyclerView.setAdapter(this.workmatesAdapter);
     }
 
+    // Configure the FirestoreRecyclerOptions that is necessary to use a recyclerview from firestore
     private FirestoreRecyclerOptions<User> generateOptionsForAdapter(Query query){
         return new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)
@@ -77,9 +79,10 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.List
 
     @Override
     public void onDataChanged() {
-        Toast.makeText(getContext(), "No user found", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.no_user, Toast.LENGTH_SHORT).show();
     }
 
+    // Add a listener on each item of the recycler view
     private void setItemClickedListener(){
         workmatesAdapter.setOnItemClickListener(new WorkmatesAdapter.OnItemClickListener() {
             @Override

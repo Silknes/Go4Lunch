@@ -33,6 +33,7 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
         colorNoRestaurant = ContextCompat.getColor(itemView.getContext(), R.color.no_restaurant);
     }
 
+    // Update with data get from Firebase
     public void updateWithDatabase(User user, RequestManager glide, String uidCurrentUser){
         if(!uidCurrentUser.equals(user.getUid())){
             glide.load(user.getUrlPhoto()).apply(RequestOptions.circleCropTransform()).into(userImage);
@@ -44,23 +45,27 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    // Update userRestaurant according to user choice
     private void updateTextView(User user){
         if(!user.getIdRestaurant().equals("")){
             getRestaurantName(user);
         }
         else{
-            userRestaurant.setText(user.getUsername() + " hasn't decided yet");
+            String str = userRestaurant.getResources().getString(R.string.user_going_nowhere, user.getUsername());
+            userRestaurant.setText(str);
             userRestaurant.setTextColor(colorNoRestaurant);
         }
     }
 
+    // Get the restaurant name from Firestore
     private void getRestaurantName(User user){
         final User myUser = user;
         RestaurantHelper.getRestaurant(user.getIdRestaurant()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String nameRestaurant = documentSnapshot.toObject(Restaurant.class).getName();
-                userRestaurant.setText(myUser.getUsername() + " will eat at \"" + nameRestaurant + "\"");
+                String str = userRestaurant.getResources().getString(R.string.user_choose_one_restaurant, myUser.getUsername(), nameRestaurant);
+                userRestaurant.setText(str);
 
             }
         });

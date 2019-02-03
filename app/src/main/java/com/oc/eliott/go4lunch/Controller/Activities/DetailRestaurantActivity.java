@@ -9,17 +9,18 @@ import com.oc.eliott.go4lunch.Controller.Fragments.JoinInFragment;
 import com.oc.eliott.go4lunch.R;
 
 public class DetailRestaurantActivity extends BaseActivity {
-    private DetailRestaurantFragment detailRestaurantFragment;
-    private JoinInFragment joinInFragment;
+    private DetailRestaurantFragment detailRestaurantFragment; // Use to instantiate a new DetailRestaurantFragment
+    private JoinInFragment joinInFragment; // Use to instantiate a new JoinInFragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_restaurant);
 
-        configureAndShowFragments();
+        configureAndShowFragments(); // Call this method to add our fragments
     }
 
+    // Configure our fragments and set for DetailRestaurantFragment some arguments and add them to this activity
     private void configureAndShowFragments(){
         detailRestaurantFragment = new DetailRestaurantFragment();
         joinInFragment = new JoinInFragment();

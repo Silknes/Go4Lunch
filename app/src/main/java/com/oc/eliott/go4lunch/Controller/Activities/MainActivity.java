@@ -22,13 +22,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.oc.eliott.go4lunch.Controller.Fragments.MapViewFragment;
@@ -37,18 +43,20 @@ import com.oc.eliott.go4lunch.Controller.Fragments.WorkmatesFragment;
 import com.oc.eliott.go4lunch.R;
 import com.oc.eliott.go4lunch.Utils.LocationSingleton;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar toolbar; // Use to set a new Toolbar
     private DrawerLayout drawerLayout; // Use to set a Navigation Drawer
     private TextView emailUser, nameUser; // These TextView will contain user's mail and name
     private ImageView profilImgUser; // This ImageView will contains user's profile photo
-    private BottomNavigationView bottomNavigationView;
-    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
+    private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1; // ID used to get back data from the placeautocomplete
+    private int fragmentId = 1; // Use to know which fragment is currently display on the screen
+    private BottomNavigationView bottomNavigationView; // Use to implement a bottom navigation view
+    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener; // Use to add a onClick on each item of the navigation bottom
     private Fragment fragment;
     private boolean mLocationPermissionGranted; // Set to true if the user accept to be located
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1; // ID to identify which permission is asked
     private Location mLastKnownLocation; // Contain the last known location of the user's phone
-    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private FusedLocationProviderClient mFusedLocationProviderClient; // Used to get the current place of the user
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,33 +69,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         nameUser = navView.getHeaderView(0).findViewById(R.id.nav_header_name_user);
         profilImgUser = navView.getHeaderView(0).findViewById(R.id.nav_header_profil_img);
 
+        // Call the method that get the permission to locate the phone and the method that get the location of the phone
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        this.getLocationPermission();
+
         // Call the different method use in this activity
         this.configureToolbar();
         this.configureDrawerLayout();
         this.configureNavigationView();
         this.updateUIWhenCreating();
-
-        // Start the activity with the MapViewFragment
-        fragment = new MapViewFragment();
-        configureAndShowFragment(fragment);
-
-        // Add a listener on each item of the BottomNavigationView
-        bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation);
-        this.addListenerToBottomNavigationViewItem();
-        bottomNavigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
-
-        // Call the method that get the permission to locate the phone and the method that get the location of the phone
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        this.getLocationPermission();
-        this.getDeviceLocation();
     }
 
     // Starting AuthentificationActivity if current user not log
     private void updateUIWhenCreating(){
-        if(getCurrentUser() != null ){
-
-        }
-        else{
+        if(getCurrentUser() == null ){
             Intent intent = new Intent(this, AuthentificationActivity.class);
             startActivity(intent);
         }
@@ -98,10 +93,43 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_toolbar_item_search:
-                Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+                try{
+                    // Create and custom our placeAutocomplete
+                    AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                            .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ESTABLISHMENT)
+                            .build();
+
+                    Intent intent = new PlaceAutocomplete
+                            .IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                            .setFilter(typeFilter)
+                            .setBoundsBias(new LatLngBounds(LocationSingleton.getInstance().getLocation(), LocationSingleton.getInstance().getLocation()))
+                            .build(this);
+
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                } catch (GooglePlayServicesRepairableException e){
+                    Log.e("GooglePlayError", e.getMessage());
+                } catch (GooglePlayServicesNotAvailableException e){
+                    Log.e("GooglePlayError2", e.getMessage());
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Get back the result of the placeAutocomplete and open the DetailRestaurantActivity for the user's choice
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Intent intent = new Intent(this, DetailRestaurantActivity.class);
+                intent.putExtra("idRestaurant", place.getId());
+                startActivity(intent);
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+            } else if (resultCode == RESULT_CANCELED) {
+            }
         }
     }
 
@@ -134,11 +162,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
         switch (id){
             case R.id.item_your_lunch :
-                Intent intent = new Intent(this, LunchActivity.class);
-                startActivity(intent);
+                Intent intentLunch = new Intent(this, LunchActivity.class);
+                startActivity(intentLunch);
                 break;
             case R.id.item_settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+                Intent intentSettings = new Intent(this, SettingsActivity.class);
+                startActivity(intentSettings);
                 break;
             case R.id.item_logout:
                 signOutUserFromFirebase();
@@ -150,6 +179,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
+    // Used to change the current view (fragment) when user click on each item of the bottom navigation view
     private void addListenerToBottomNavigationViewItem(){
         onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -158,14 +188,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     case R.id.menu_nav_map_view:
                         fragment = new MapViewFragment();
                         configureAndShowFragment(fragment);
+                        fragmentId = 1;
                         return true;
                     case R.id.menu_nav_list_view:
                         fragment = new RecyclerViewFragment();
                         configureAndShowFragment(fragment);
+                        fragmentId = 2;
                         return true;
                     case R.id.menu_nav_workmates:
                         fragment = new WorkmatesFragment();
                         configureAndShowFragment(fragment);
+                        fragmentId = 3;
                         return true;
                     default:
                         return false;
@@ -174,6 +207,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         };
     }
 
+    // Method that configure our fragments
     private void configureAndShowFragment(Fragment fragment){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_activity_fragment_container, fragment);
@@ -235,7 +269,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             mLastKnownLocation = task.getResult();
                             if(mLastKnownLocation != null) LocationSingleton.getInstance().setLat(mLastKnownLocation.getLatitude());
                             if(mLastKnownLocation != null) LocationSingleton.getInstance().setLng(mLastKnownLocation.getLongitude());
-                            //Toast.makeText(MainActivity.this, "location : " + LocationSingleton.getInstance().toString(), Toast.LENGTH_LONG).show();
+
+                            fragment = new MapViewFragment();
+                            configureAndShowFragment(fragment);
+
+                            // Add a listener on each item of the BottomNavigationView
+                            bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation);
+                            addListenerToBottomNavigationViewItem();
+                            bottomNavigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
                         }
                     }
                 });
@@ -251,6 +292,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
+            getDeviceLocation();
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -265,6 +307,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
+                    getDeviceLocation();
                 }
             }
         }

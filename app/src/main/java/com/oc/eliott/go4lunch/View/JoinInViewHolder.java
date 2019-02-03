@@ -26,10 +26,12 @@ public class JoinInViewHolder extends RecyclerView.ViewHolder {
         view = itemView.findViewById(R.id.workmates_fragment_view);
     }
 
+    // Update with data get from Firebase
     public void updateWithDatabase(User user, RequestManager glide, String idRestaurant, String uidCurrentUser){
         if(user.getIdRestaurant().equals(idRestaurant) && !uidCurrentUser.equals(user.getUid())){
             glide.load(user.getUrlPhoto()).apply(RequestOptions.circleCropTransform()).into(userImage);
-            userRestaurant.setText(user.getUsername() + " is joining !");
+            String str = userRestaurant.getResources().getString(R.string.user_joinin, user.getUsername());
+            userRestaurant.setText(str);
             view.setVisibility(View.INVISIBLE);
         }
         else{

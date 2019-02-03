@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Erreur inconnue", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.unknown_error), Toast.LENGTH_LONG).show();
             }
         };
     }

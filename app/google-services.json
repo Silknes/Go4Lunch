@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "898688683130",
-    "firebase_url": "https://go4lunch-d4691.firebaseio.com",
-    "project_id": "go4lunch-d4691",
-    "storage_bucket": "go4lunch-d4691.appspot.com"
+    "project_number": "282772280740",
+    "firebase_url": "https://openclassrooms-fcc00.firebaseio.com",
+    "project_id": "openclassrooms-fcc00",
+    "storage_bucket": "openclassrooms-fcc00.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:898688683130:android:7ad5b924b7e1aaea",
+        "mobilesdk_app_id": "1:282772280740:android:7ad5b924b7e1aaea",
         "android_client_info": {
           "package_name": "com.oc.eliott.go4lunch"
         }
       },
       "oauth_client": [
         {
-          "client_id": "898688683130-frqv25dbvcijr2ss8vpac14c5il5d2mn.apps.googleusercontent.com",
+          "client_id": "282772280740-c5bn63mv77kgd9mopbrta23lckdj7gk0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.oc.eliott.go4lunch",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "898688683130-onnfddhd3ttgfg3ghmm9p4pagd4n54gm.apps.googleusercontent.com",
+          "client_id": "282772280740-udn5t2dpfdn3u8btmr12h7upcr2b8dl3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAt9NsbMwT3nj2LL-6Rm-nUfe_mVmVJ2Hg"
+          "current_key": "AIzaSyBVDtcOo2gjG_2LT22SBknlNV5oAnNEpyo"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "898688683130-onnfddhd3ttgfg3ghmm9p4pagd4n54gm.apps.googleusercontent.com",
+              "client_id": "282772280740-udn5t2dpfdn3u8btmr12h7upcr2b8dl3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

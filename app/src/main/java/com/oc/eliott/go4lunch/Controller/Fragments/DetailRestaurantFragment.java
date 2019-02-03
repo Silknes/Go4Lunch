@@ -4,7 +4,6 @@ package com.oc.eliott.go4lunch.Controller.Fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,9 @@ import com.oc.eliott.go4lunch.R;
 import java.util.List;
 
 public class DetailRestaurantFragment extends BasicFragment {
-    private String name, address, urlPhoto, website, phoneNumber;
-    private User modelCurrentUser;
-    private List<String> like;
+    private String name, address, urlPhoto, website, phoneNumber; // These String are used to contain the data of the restaurant
+    private User modelCurrentUser; // Contain the currentUser
+    private List<String> like; // Contain all user uid who like the restaurant
 
     public DetailRestaurantFragment() {}
 
@@ -40,6 +39,11 @@ public class DetailRestaurantFragment extends BasicFragment {
         return view;
     }
 
+    /*
+    Update the view by set the name, the address and the photo of the restaurant
+    We update the FAB if user going to this restaurant
+    And we check if the user already like this restaurant
+    */
     private void updateViewWithRestaurantDetail(){
         nameRestaurant.setText(name);
         addressRestaurant.setText(address);
@@ -63,29 +67,28 @@ public class DetailRestaurantFragment extends BasicFragment {
         });
     }
 
+    // Method used to allow the user to call the restaurant
     private void callTheRestaurant(){
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.fromParts("tel", "0761256954", null));
+                intent.setData(Uri.fromParts("tel", phoneNumber, null));
                 startActivity(intent);
             }
         });
     }
 
+    // Method that update the like button considering if the user are liking the restaurant or not
     private void updateLike(){
         btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 RestaurantHelper.getRestaurant(getArguments().getString("idRestaurant")).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         like = documentSnapshot.toObject(Restaurant.class).getLike();
                         if(like.contains(getArguments().getString("uid"))) {
-
-                            Snackbar.make(getView().findViewById(R.id.basic_fragment_coordinator_layout), "You unlike it ...", Snackbar.LENGTH_LONG).show();
                             btnLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_orange_24dp));
                             likeTxt.setTextColor(getResources().getColor(R.color.colorPrimary));
 
@@ -93,7 +96,6 @@ public class DetailRestaurantFragment extends BasicFragment {
                             RestaurantHelper.updateLike(getArguments().getString("idRestaurant"), like);
                         }
                         else {
-                            Snackbar.make(getView().findViewById(R.id.basic_fragment_coordinator_layout), "You like it !", Snackbar.LENGTH_LONG).show();
                             btnLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_yellow_24dp));
                             likeTxt.setTextColor(getResources().getColor(R.color.like));
 
@@ -106,6 +108,7 @@ public class DetailRestaurantFragment extends BasicFragment {
         });
     }
 
+    // Method used to allow user to fetch the restaurant's website
     private void fetchRestaurantWebsite(){
         btnWebsite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +120,7 @@ public class DetailRestaurantFragment extends BasicFragment {
         });
     }
 
+    // When the user click on the FAB we save his choice to go or leave this restaurant and update the view
     private void setTheLunch(){
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +130,7 @@ public class DetailRestaurantFragment extends BasicFragment {
         });
     }
 
+    // Method that check if the user choose this restaurant or not
     private void isSelectedLunch(){
         UserHelper.getUser(getArguments().getString("uid")).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -138,6 +143,7 @@ public class DetailRestaurantFragment extends BasicFragment {
         });
     }
 
+    // Method that update the FAB considering the choice of the user to go or not in this restaurant
     private void updateLunch(){
         UserHelper.getUser(getArguments().getString("uid")).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -155,17 +161,21 @@ public class DetailRestaurantFragment extends BasicFragment {
         });
     }
 
+    // Get the different data of the restarant in the DB
     private void getRestaurantData(){
         RestaurantHelper.getRestaurant(getArguments().getString("idRestaurant")).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Restaurant restaurant = documentSnapshot.toObject(Restaurant.class);
-                name = restaurant.getName();
-                address = restaurant.getAddress();
-                urlPhoto = restaurant.getUrlPhoto();
-                website = restaurant.getWebsite();
-                phoneNumber = restaurant.getPhoneNumber();
+                if(restaurant != null){
+                    name = restaurant.getName();
+                    address = restaurant.getAddress();
+                    urlPhoto = restaurant.getUrlPhoto();
+                    website = restaurant.getWebsite();
+                    phoneNumber = restaurant.getPhoneNumber();
+                }
 
+                // We call our diffenret method after we get back the data from the DB
                 updateViewWithRestaurantDetail();
                 callTheRestaurant();
                 updateLike();

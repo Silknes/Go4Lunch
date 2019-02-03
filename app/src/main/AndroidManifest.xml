@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.oc.eliott.go4lunch">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
         <meta-data
-            android:name="com.oc.eliott.go4lunch.API_KEY"
-            android:value="AIzaSyDpeF3oyloo_1Fb00GZciwOFHTJB3w72vk" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/ApiKey" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity android:name=".Controller.Activities.MainActivity">
             <intent-filter>
@@ -23,9 +31,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".Controller.Activities.AuthentificationActivity" />
-        <activity android:name=".Controller.Activities.BaseActivity" />
         <activity android:name=".Controller.Activities.DetailRestaurantActivity" />
-        <activity android:name=".Controller.Activities.LunchActivity"></activity>
+        <activity android:name=".Controller.Activities.LunchActivity" />
+
+        <service android:name=".Notifications.NotificationsService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".Controller.Activities.SettingsActivity" />
     </application>
 
 </manifest>

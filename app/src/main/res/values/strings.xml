@@ -4,6 +4,7 @@
 
     <string name="btn_facebook">Sign in with Facebook</string>
     <string name="btn_google">Sign in with Google</string>
+    <string name="btn_email">Sign in with email</string>
     <string name="connection_failed">Connection failed</string>
 
     <string name="item_search">Search</string>
@@ -22,6 +23,30 @@
     <string name="popup_message_choice_yes">Yes</string>
     <string name="popup_message_choice_no">No</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="authentification_canceled">Authentification canceled</string>
+    <string name="no_network_connection">No network Connection</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="no_restaurant_selected">No restaurant selected</string>
+
+    <string name="notification_is_enabled">Notification is enabled and will send at 12am.</string>
+    <string name="notification_is_disabled">Notification is disabled.</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="current_place">Current Place</string>
+    <string name="no_user">No user found</string>
+
+    <string name="channel_name">Message from Firebase</string>
+    <string name="content_notification">You will lunch at %1$s with : </string>
+    <string name="content_title_notification">You receive a new notification from Go4Lunch</string>
+
+    <string name="default_openinghours_text">Cannot access to opening hours</string>
+    <string name="restaurant_always_open">Open 24/7</string>
+    <string name="restaurant_open_until">Open until %1$s</string>
+    <string name="restaurant_open_at">Open at %1$s</string>
+    <string name="restaurant_close">Close</string>
+
+    <string name="user_joinin">%1$s is joining !</string>
+
+    <string name="user_choose_one_restaurant">%1$s will eat at "%2$s"</string>
+    <string name="user_going_nowhere">%1$s hasn\'t decided yet</string>
 </resources>

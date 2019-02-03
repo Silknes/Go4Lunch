@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Controller.Fragments.RecyclerViewFragment">
+    
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        style="?android:progressBarStyleHorizontal"
+        android:progress="50"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:progressDrawable="@drawable/circle"
+        android:id="@+id/recycler_view_progress_bar"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_fragment_recycler_view"

@@ -7,6 +7,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.oc.eliott.go4lunch.Model.User;
 
+/*
+This class contains some methods that return data from the the database
+Here we want to get the collection user and sometimes update the different field
+Or just get some fields that will used in activities or fragments
+*/
+
 public class UserHelper {
     private static final String COLLECTION_NAME = "users";
 

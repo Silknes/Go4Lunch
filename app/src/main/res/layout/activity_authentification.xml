@@ -46,12 +46,12 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_facebook"
-                android:background="@drawable/auth_facebook_btn"
+                android:text="@string/btn_email"
+                android:background="@drawable/auth_email_btn"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="20dp"
                 android:textAllCaps="false"
-                android:id="@+id/activity_auth_btn_facebook"/>
+                android:id="@+id/activity_auth_btn_email"/>
 
             <Button
                 android:layout_width="match_parent"
@@ -62,6 +62,16 @@
                 android:layout_marginTop="20dp"
                 android:textAllCaps="false"
                 android:id="@+id/activity_auth_btn_google"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_facebook"
+                android:background="@drawable/auth_facebook_btn"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="20dp"
+                android:textAllCaps="false"
+                android:id="@+id/activity_auth_btn_facebook"/>
 
         </LinearLayout>
 

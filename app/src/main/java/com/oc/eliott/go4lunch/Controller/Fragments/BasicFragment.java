@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.oc.eliott.go4lunch.R;
 
 public class BasicFragment extends Fragment {
+    // These Objects contain all the view used in child fragment
     protected ImageView imgRestaurant;
     protected TextView nameRestaurant, addressRestaurant, likeTxt;
     protected ImageButton btnCall, btnLike, btnWebsite;
@@ -27,6 +28,7 @@ public class BasicFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_basic, container, false);
     }
 
+    // Method that will call by the child fragment and use to bind all the view
     protected void bindView(View view){
         imgRestaurant = view.findViewById(R.id.basic_fragment_img_restaurant);
         nameRestaurant = view.findViewById(R.id.basic_fragment_name_restaurant);

@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Controller.Activities.DetailRestaurantActivity">
+    tools:context=".Controller.Activities.DetailRestaurantActivity"
+    android:id="@+id/detail_restaurant_activity_container">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:id="@+id/detail_restaurant_fragment_linear_layout">
 
     </LinearLayout>
@@ -17,6 +19,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:id="@+id/lunch_in_fragment_linear_layout">
 
     </LinearLayout>

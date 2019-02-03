@@ -8,6 +8,12 @@ import com.oc.eliott.go4lunch.Model.Restaurant;
 
 import java.util.List;
 
+/*
+This class contains some methods that return data from the the database
+Here we want to get the collection restaurant and sometimes update the different field
+Or just get some fields that will used in activities or fragments
+*/
+
 public class RestaurantHelper {
     private static final String COLLECTION_NAME = "restaurant";
 

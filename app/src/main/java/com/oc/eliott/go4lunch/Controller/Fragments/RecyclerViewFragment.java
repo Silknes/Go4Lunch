@@ -7,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.oc.eliott.go4lunch.BuildConfig;
@@ -29,11 +29,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.CallbacksGooglePlaces, GoogleAPICalls.CallbacksPlaceDetails{
-    private GooglePlacesAdapter adapter;
-    private RecyclerView recyclerView;
-    private List<Result> listRestaurant;
-    private List<ResultPlaceDetails> restaurantDetails;
-    private int position = 0;
+    private GooglePlacesAdapter adapter; // Use to customize the recycler view
+    private RecyclerView recyclerView; // Use to implement the recycler view
+    private List<Result> listRestaurant; // Contain all closed restaurant
+    private List<ResultPlaceDetails> restaurantDetails; // Contains all placeID of closed restaurant
+    private AtomicInteger atomicInteger; // Use to know when we have to stop fetching for restaurant details
+    private ProgressBar progressBar;
 
     public RecyclerViewFragment() {}
 
@@ -42,8 +43,13 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
+        // Bind our recycler view
         recyclerView = view.findViewById(R.id.recycler_view_fragment_recycler_view);
+        progressBar = view.findViewById(R.id.recycler_view_progress_bar);
 
+        progressBar.setVisibility(View.VISIBLE);
+
+        // Call methods to configure the recycler view, to search closed restaurant and add an onClickListener on each item of the recycler view
         this.configureRecyclerView();
         this.fetchRestaurantsNearby();
         this.configureOnClickRecyclerView();
@@ -51,6 +57,7 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
         return view;
     }
 
+    // Method that configure our recycler view
     private void configureRecyclerView(){
         this.listRestaurant = new ArrayList<>();
         this.restaurantDetails = new ArrayList<>();
@@ -59,6 +66,7 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
         this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    // Method that configure the click on each item of the recycler view
     private void configureOnClickRecyclerView(){
         ItemClickSupport.addTo(recyclerView, R.layout.recycler_view_fragment_item)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
@@ -71,14 +79,17 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
                 });
     }
 
+    // Method that fetch all closed restaurant around user location
     public void fetchRestaurantsNearby(){
         GoogleAPICalls.fetchRestaurantNearby(this, BuildConfig.ApiKey, "" + LocationSingleton.getInstance().toString() , "distance", "restaurant");
     }
 
+    // Method that fetch details on each closed restaurant around user location
     public void fetchRestaurantDetails(String placeID, int position){
         GoogleAPICalls.fetchRestaurantDetails(this, BuildConfig.ApiKey, placeID, "opening_hours,name,website,formatted_phone_number,formatted_address", position);
     }
 
+    // When get back datas from Google API Places, for each restaurant, we call fetchRestaurantDetails to have more information about each restaurant
     @Override
     public void onResponseGooglePlaces(@Nullable ResultGooglePlaces resultGP) {
         if(resultGP != null) {
@@ -96,13 +107,15 @@ public class RecyclerViewFragment extends Fragment implements GoogleAPICalls.Cal
     @Override
     public void onFailureGooglePlaces() { }
 
-    private AtomicInteger atomicInteger;
-
+    // Update the adapter when we get more details for each restaurant
     @Override
     public synchronized void onResponsePlaceDetails(@Nullable ResultPlaceDetails resultPD, int position) {
         if(resultPD != null) {
             restaurantDetails.set(position, resultPD);
-            if(atomicInteger.getAndDecrement() < 1)adapter.notifyDataSetChanged();
+            if(atomicInteger.getAndDecrement() < 1){
+                progressBar.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 

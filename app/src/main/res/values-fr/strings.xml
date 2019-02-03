@@ -1,0 +1,52 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Go4Lunch</string>
+    <string name="app_slogan">Trouve un restaurant sympas et invite tes collègues à manger !</string>
+
+    <string name="btn_facebook">Connexion avec Facebook</string>
+    <string name="btn_google">Connexion avec Google</string>
+    <string name="btn_email">Connexion avec email</string>
+    <string name="connection_failed">Echec de la connexion</string>
+
+    <string name="item_search">Recherche</string>
+
+    <string name="item_your_lunch">VOTRE REPAS</string>
+    <string name="item_settings">PARAMETRES</string>
+    <string name="item_log_out">DECONNEXION</string>
+
+    <string name="navigation_drawer_open">Ouvre le navigation drawer</string>
+    <string name="navigation_drawer_close">Ferme le navigation drawer</string>
+
+    <string name="facebook_application_id">2071544302892177</string>
+    <string name="facebook_login_protocol_scheme" translatable="false" tools:ignore="UnusedResources">fb2071544302892177</string>
+
+    <string name="popup_message_confirmation_deconnection">Voulez vous vous déconnecter ?</string>
+    <string name="popup_message_choice_yes">Oui</string>
+    <string name="popup_message_choice_no">Non</string>
+
+    <string name="authentification_canceled">Authentification annulée</string>
+    <string name="no_network_connection">Pas de connection internet</string>
+    <string name="unknown_error">Erreur inconnue</string>
+    <string name="no_restaurant_selected">Aucun restaurant selectionné</string>
+
+    <string name="notification_is_enabled">Les notifications sont activées et envoyées à midi</string>
+    <string name="notification_is_disabled">Les notifications sont désactivées</string>
+    <string name="title_activity_maps">Carte</string>
+
+    <string name="current_place">Votre position</string>
+    <string name="no_user">Aucun utilisateur trouvé</string>
+
+    <string name="channel_name">Message depuis Firebase</string>
+    <string name="content_notification">Vous allez manger à %1$s, avec : </string>
+    <string name="content_title_notification">Vous avez reçu une nouvelle notification de Go4Lunch</string>
+
+    <string name="default_openinghours_text">Impossible d\'accéder aux heures d'ouverture</string>
+    <string name="restaurant_always_open">Ouvert 24/7</string>
+    <string name="restaurant_open_until">Ouvert jusqu\'à %1$s</string>
+    <string name="restaurant_open_at">Ouvre à %1$s</string>
+    <string name="restaurant_close">Fermé</string>
+
+    <string name="user_joinin">%1$s y va !</string>
+
+    <string name="user_choose_one_restaurant">%1$s va manger au "%2$s"</string>
+    <string name="user_going_nowhere">%1$s n\'a pas encore décidé</string>
+</resources>
