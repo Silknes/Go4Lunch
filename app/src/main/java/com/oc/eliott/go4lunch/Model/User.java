@@ -5,14 +5,16 @@ public class User {
     private String urlPhoto;
     private String username;
     private String idRestaurant;
+    private String userEmail;
 
     public User(){}
 
-    public User(String uid, String urlPhoto, String username, String idRestaurant) {
+    public User(String uid, String urlPhoto, String username, String idRestaurant, String userEmail) {
         this.uid = uid;
         this.urlPhoto = urlPhoto;
         this.username = username;
         this.idRestaurant = idRestaurant;
+        this.userEmail = userEmail;
     }
 
     public String getUid() {
@@ -45,5 +47,13 @@ public class User {
 
     public void setIdRestaurant(String idRestaurant) {
         this.idRestaurant = idRestaurant;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

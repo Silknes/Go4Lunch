@@ -31,7 +31,7 @@ public class AuthentificationActivity extends BaseActivity {
         emailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startSignInActivity();
+                startSignInWithEmailActivity();
             }
         });
 
@@ -47,13 +47,13 @@ public class AuthentificationActivity extends BaseActivity {
         facebookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startSignInActivityWithFacebook();
+                startSignInWithFacebookActivity();
             }
         });
     }
 
     // Method wich configure the connection with an email
-    private void startSignInActivity(){
+    private void startSignInWithEmailActivity(){
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -75,7 +75,7 @@ public class AuthentificationActivity extends BaseActivity {
     }
 
     // Method wich configure the connection with Facebook
-    private void startSignInActivityWithFacebook(){
+    private void startSignInWithFacebookActivity(){
         startActivityForResult(AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setTheme(R.style.LoginTheme)
@@ -91,8 +91,9 @@ public class AuthentificationActivity extends BaseActivity {
             String uid = this.getCurrentUser().getUid();
             String urlPhoto = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
             String idRestaurant = "";
+            String userEmail = this.getCurrentUser().getEmail();
 
-            UserHelper.createUser(uid, urlPhoto, username, idRestaurant);
+            UserHelper.createUser(uid, urlPhoto, username, idRestaurant, userEmail);
         }
     }
 
@@ -102,8 +103,6 @@ public class AuthentificationActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         this.handleResponseAfterSignIn(requestCode, resultCode, data);
-
-        if(requestCode == RC_SIGN_IN) if(resultCode == RESULT_OK) finish();
     }
 
     // Call the method which create the user in Firestore or display an error message if the authentification failed
@@ -111,7 +110,7 @@ public class AuthentificationActivity extends BaseActivity {
         IdpResponse response = IdpResponse.fromResultIntent(data);
         if(requestCode == RC_SIGN_IN) {
             if(resultCode == RESULT_OK) {
-                this.createUserInFirestore();
+                createUserInFirestore();
                 finish();
             } else {
                 if (response == null) {

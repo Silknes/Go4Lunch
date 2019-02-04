@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="icn_auth_act_margin_top">40dp</dimen>
+    <dimen name="icn_auth_act_width">150dp</dimen>
+    <dimen name="icn_auth_act_height">150dp</dimen>
+    <dimen name="title_auth_act_size">50sp</dimen>
+    <dimen name="slogan_auth_act_margin_bottom">40dp</dimen>
+
+</resources>

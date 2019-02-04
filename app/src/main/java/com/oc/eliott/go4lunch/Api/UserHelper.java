@@ -20,8 +20,8 @@ public class UserHelper {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }
 
-    public static Task<Void> createUser(String uid, String urlPhoto, String username, String idRestaurant){
-        User userToCreate = new User(uid, urlPhoto, username, idRestaurant);
+    public static Task<Void> createUser(String uid, String urlPhoto, String username, String idRestaurant, String userEmail){
+        User userToCreate = new User(uid, urlPhoto, username, idRestaurant, userEmail);
         return UserHelper.getUsersCollection().document(uid).set(userToCreate);
     }
 
@@ -35,6 +35,10 @@ public class UserHelper {
 
     public static Task<Void> updateRestaurantId(String uid, String idRestaurant){
         return UserHelper.getUsersCollection().document(uid).update("idRestaurant", idRestaurant);
+    }
+
+    public static Task<Void> updateUserEmail(String uid, String userEmail){
+        return UserHelper.getUsersCollection().document(uid).update("userEmail", userEmail);
     }
 
     public static Query getAllUsers(){

@@ -4,7 +4,8 @@
 
     <string name="btn_facebook">Sign in with Facebook</string>
     <string name="btn_google">Sign in with Google</string>
-    <string name="btn_email">Sign in with email</string>
+    <string name="btn_email">Sign in with Email</string>
+    <string name="btn_github">Sign in with Github</string>
     <string name="connection_failed">Connection failed</string>
 
     <string name="item_search">Search</string>

@@ -84,7 +84,6 @@
             android:layout_height="80dp"
             android:layout_weight="0"
             android:id="@+id/recycler_view_fragment_img_restaurant"
-            android:src="@drawable/family_dinner"
             android:scaleType="centerCrop">
 
         </ImageView>

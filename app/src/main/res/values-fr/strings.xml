@@ -4,7 +4,8 @@
 
     <string name="btn_facebook">Connexion avec Facebook</string>
     <string name="btn_google">Connexion avec Google</string>
-    <string name="btn_email">Connexion avec email</string>
+    <string name="btn_email">Connexion avec Email</string>
+    <string name="btn_github">Connexion avec Github</string>
     <string name="connection_failed">Echec de la connexion</string>
 
     <string name="item_search">Recherche</string>
